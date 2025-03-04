@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in</title>
+</head>
+<body>
+    <h2>📌 ចូលធ្វើការនៅក្រុមហ៊ុន</h2>
+    <p>សូមរង់ចាំ...</p>
+
+    <script>
+        async function sendCheckinData() {
+            try {
+                // Get the user's public IP
+                let ipResponse = await fetch("https://api64.ipify.org?format=json");
+                let ipData = await ipResponse.json();
+                let userIP = ipData.ip;
+
+                // Extract Telegram User Data from URL parameters
+                let params = new URLSearchParams(window.location.search);
+                let userId = params.get("user_id") || "Unknown";
+                let username = params.get("username") || "Unknown";
+                let status = params.get("status") || "Check-in";
+
+                // Send Data to Google Apps Script
+                let response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        user_id: userId, 
+                        username: username, 
+                        ip_address: userIP, 
+                        status: status
+                    })
+                });
+
+                let text = await response.text();
+                document.body.innerHTML = `<h2>${text}</h2>`;
+
+            } catch (error) {
+                document.body.innerHTML = `<h2>❌ បញ្ហាក្នុងប្រព័ន្ធ!</h2>`;
+            }
+        }
+
+        sendCheckinData();
+    </script>
+</body>
+</html>
