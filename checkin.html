@@ -12,18 +12,15 @@
     <script>
         async function sendCheckinData() {
             try {
-                // Get the user's public IP
                 let ipResponse = await fetch("https://api64.ipify.org?format=json");
                 let ipData = await ipResponse.json();
                 let userIP = ipData.ip;
 
-                // Extract Telegram User Data from URL parameters
                 let params = new URLSearchParams(window.location.search);
-                let userId = params.get("user_id") || "Unknown";
-                let username = params.get("username") || "Unknown";
-                let status = params.get("status") || "Check-in";
+                let userId = params.get("user_id");
+                let username = params.get("username");
+                let status = params.get("status");
 
-                // Send Data to Google Apps Script
                 let response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
